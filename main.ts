@@ -648,6 +648,7 @@ namespace YFSENSORS {
     //% state.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode=inline
+    //% blockHidden=true
     export function aDOutputModule(adom: YFADOutputModule, adomPin: AnalogPin, state: boolean, percentage: number = 100): void {
         let adomM = adom;  // no work
         if (state) {
@@ -684,6 +685,7 @@ namespace YFSENSORS {
     //% domPin.fieldEditor="gridpicker" domPin.fieldOptions.columns=4
     //% dom.fieldEditor="gridpicker" dom.fieldOptions.columns=2
     // sws.fieldEditor="gridpicker" sws.fieldOptions.columns=2
+    //% blockHidden=true
     export function digitalOutputModule(dom: YFDigitalOutputModule, domPin: DigitalPin, sws: number): void {
         let domM = dom;  // no work
         pins.digitalWritePin(domPin, sws);
@@ -700,6 +702,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_OTPFixedVoiceListNum weight=10 blockGap=15
     //% block="%num| "
     //% num.fieldEditor="gridpicker" num.fieldOptions.columns=10
+    //% blockHidden=true
     export function OTPFixedVoiceListNum(num: YFOTPFixedVoiceList): number {
         return num;
     }
@@ -712,6 +715,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_OTPFixedVoiceListNum2 weight=94 blockGap=15
     //% block="%num"
     //% num.fieldEditor="gridpicker" num.fieldOptions.columns=10
+    //% blockHidden=true
     export function OTPFixedVoiceListNum2(num: YFOTPFixedVoiceList2): number {
         return num;
     }
@@ -731,6 +735,7 @@ namespace YFSENSORS {
     //% color.fieldOptions.colours='["#FF0000","#659900","#18E600","#80FF00","#00FF00","#FF8000","#D82600","#B24C00","#00FFC0","#00FF80","#FFC000","#FF0080","#FF00FF","#B09EFF","#00FFFF","#FFFF00","#8000FF","#0080FF","#0000FF","#FFFFFF","#FF8080","#80FF80","#40C0FF","#999999","#000000"]'
     //% color.fieldOptions.columns=5
     //% color.fieldOptions.className='rgbColorPicker'
+    //% blockHidden=true
     export function BBColours(color: number): number {
         return color;
     }
@@ -779,6 +784,7 @@ namespace YFSENSORS {
     //% block="voice broadcast %vbmPin| play %serial_number=YFSENSORS_OTPFixedVoiceListNum || delay %delayt| ms"
     //% vbmPin.fieldEditor="gridpicker" vbmPin.fieldOptions.columns=4
     //% inlineInputMode=inline
+    //% blockHidden=true
     export function voiceBroadcastModule(vbmPin: DigitalPin, serial_number: number, delayt: number = 50): void {
         voiceBroadcastModuleSendDataWithS(vbmPin, serial_number);
         if (delayt >= 50 ) {
@@ -797,6 +803,7 @@ namespace YFSENSORS {
     //% vbmfPin.fieldEditor="gridpicker" vbmfPin.fieldOptions.columns=4
     //% serial_num.fieldEditor="gridpicker" serial_num.fieldOptions.columns=4
     //% inlineInputMode=inline
+    //% blockHidden=true
     export function voiceBroadcastModuleFun(vbmfPin: DigitalPin, serial_num: YFOTPFixedVoiceFun): void {
         let snumber = serial_num;
         voiceBroadcastModuleSendDataWithS(vbmfPin, snumber);
@@ -812,6 +819,7 @@ namespace YFSENSORS {
     //% block="voice broadcast %vbmPin| continuous play %serial_number"
     //% vbmPin.fieldEditor="gridpicker" vbmPin.fieldOptions.columns=4
     //% inlineInputMode=inline
+    //% blockHidden=true
     export function voiceBroadcastModuleFunContPlay(vbmPin: DigitalPin, serial_number: number[]): void {
         let checksum = 0;
         voiceBroadcastModuleSendDataWithS(vbmPin, YFOTPFixedVoiceFun2.HeadCode); // 头码
@@ -833,6 +841,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_OTPFixedVoiceMute weight=91 blockGap=15
     //% block="%mute"
     //% num.fieldEditor="gridpicker" num.fieldOptions.columns=10
+    //% blockHidden=true
     export function OTPFixedVoiceMute(mute: YFOTPFixedVoiceFunMute): number {
         return mute;
     }
@@ -846,6 +855,7 @@ namespace YFSENSORS {
     //% blockId="YFSENSORS_audioPlaybackModule_connectPin" weight=90 blockGap=15
     //% block="connect MP3 audio playback module at %pin_data"
     //% pin_data.fieldEditor="gridpicker" pin_data.fieldOptions.columns=4 pin_data.fieldOptions.tooltips="false"
+    //% blockHidden=true
     export function audioPlaybackModule_connectPin(pin_data: DigitalPin): void {
         AudioPlaybackPin_data = pin_data;
     }
@@ -896,6 +906,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_audioPlaybackModuleSelectTrackNum weight=90 blockGap=15
     //% block="audio playback select specified track %specified_track| no play"
     //% specified_track.min=1 specified_track.max=255
+    //% blockHidden=true
     export function audioPlaybackModuleSelectTrackNum(specified_track: number): void {
         let s_track = specified_track;
         if(s_track >= 10){
@@ -918,6 +929,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_audioPlaybackModuleFunSelect weight=89 blockGap=15
     //% block="audio playback %specified_fun"
     //% specified_fun.fieldEditor="gridpicker" specified_fun.fieldOptions.columns=2
+    //% blockHidden=true
     export function audioPlaybackModuleFunSelect(specified_fun: YFAudioPlaybackFunWithNum): void {
         audioPlaybackModule_sendData(specified_fun);
     }
@@ -931,6 +943,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_audioPlaybackModuleFunWithNum weight=88 blockGap=15
     //% block="audio playback %specified_fun| %specified_track"
     //% specified_fun.fieldEditor="gridpicker" specified_fun.fieldOptions.columns=2
+    //% blockHidden=true
     export function audioPlaybackModuleFunWithNum(specified_fun: YFAudioPlaybackFunWithNum, specified_track: number): void {
         if (specified_fun == YFAudioPlaybackFunWithNum.SelectPlay || specified_fun == YFAudioPlaybackFunWithNum.SetInsertTrack) {
             if (specified_track >= 255) specified_track = 255;
@@ -964,6 +977,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_audioPlaybackModuleFun weight=86 blockGap=15
     //% block="audio playback %specified_fun"
     //% specified_fun.fieldEditor="gridpicker" specified_fun.fieldOptions.columns=3
+    //% blockHidden=true
     export function audioPlaybackModuleFun(specified_fun: YFAudioPlaybackFun): void {
         audioPlaybackModule_sendData(specified_fun);
     }
@@ -979,6 +993,7 @@ namespace YFSENSORS {
     //% block="%m_busy read busy pin %pin_busy"
     //% pin_busy.fieldEditor="gridpicker" pin_busy.fieldOptions.columns=4
     //% m_busy.fieldEditor="gridpicker" m_busy.fieldOptions.columns=2
+    //% blockHidden=true
     export function readBusyPin(m_busy: YFMVModule, pin_busy: DigitalPin): boolean {
         let m_busyM = m_busy;  // no work
         let a: number = pins.digitalReadPin(pin_busy);
@@ -998,6 +1013,7 @@ namespace YFSENSORS {
     //% block="voice recorder module %pin_vrm| %vrmfun"
     //% pin_vrm.fieldEditor="gridpicker" pin_vrm.fieldOptions.columns=4
     //% vrmfun.fieldEditor="gridpicker" vrmfun.fieldOptions.columns=2
+    //% blockHidden=true
     export function voiceRecorderModule(pin_vrm: DigitalPin, vrmfun: YFVRMFunction): void {
         if (vrmfun == YFVRMFunction.PLAY_ONCE) {
             pins.digitalWritePin(pin_vrm, 0)
@@ -1076,6 +1092,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_readTemperatureSensor weight=95 blockGap=15
     //% block="temperature sensor %tempPin| temperature value"
     //% tempPin.fieldEditor="gridpicker" tempPin.fieldOptions.columns=4
+    //% blockHidden=true
     export function readTemperatureSensor(tempPin: AnalogPin): number {
         let val = pins.analogReadPin(tempPin); 
         let tvalue = (val * 3.3 * 100) / 1024;
@@ -1149,6 +1166,7 @@ namespace YFSENSORS {
     //% pin.fieldEditor="gridpicker" pin.fieldOptions.columns=4
     //% dht11state.fieldEditor="gridpicker" dht11state.fieldOptions.columns=1
     //% inlineInputMode=inline
+    //% blockHidden=true
     export function dht11Sensor(pin: DigitalPin, dht11state: YFDHT11_state): number {
         //initialize
         basic.pause(1000)
@@ -1615,7 +1633,7 @@ namespace YFSENSORS {
     //% pin.fieldEditor="gridpicker"
     //% pin.fieldOptions.columns=4
     //% pin.fieldOptions.tooltips="false"
-    //%
+    //% blockHidden=true
     export function connectIrReceiver(pin: DigitalPin, protocol: YFIrProtocol): void {
         if (irState) {
             return;
@@ -1697,6 +1715,7 @@ namespace YFSENSORS {
     //% button.fieldEditor="gridpicker"
     //% button.fieldOptions.columns=3
     //% button.fieldOptions.tooltips="false"
+    //% blockHidden=true
     export function onIrButton(button: YFIrButton, action: YFIrButtonAction, handler: () => void) {
         control.onEvent(
             action === YFIrButtonAction.Pressed
@@ -1716,6 +1735,7 @@ namespace YFSENSORS {
     //% subcategory="IR_Receiver"
     //% blockId=YFSENSORS_infrared_ir_button_pressed weight=10 blockGap=15
     //% block="IR button"
+    //% blockHidden=true
     export function irButton(): number {
         if (!irState) {
             return YFIrButton.Any;
@@ -1729,6 +1749,7 @@ namespace YFSENSORS {
     //% subcategory="IR_Receiver"
     //% blockId=YFSENSORS_infrared_was_any_button_pressed weight=7 blockGap=15
     //% block="any IR button was pressed"
+    //% blockHidden=true
     export function wasAnyIrButtonPressed(): boolean {
         if (!irState) {
             return false;
@@ -1751,6 +1772,7 @@ namespace YFSENSORS {
     //% button.fieldOptions.columns=3
     //% button.fieldOptions.tooltips="false"
     //% block="IR button code %button"
+    //% blockHidden=true
     export function irButtonCode(button: YFIrButton): number {
         return button as number;
     }
@@ -1767,6 +1789,7 @@ namespace YFSENSORS {
     //% block="on IR button | %button | %action"
     //% button.fieldEditor="gridpicker" button.fieldOptions.columns=3
     //% button.fieldOptions.tooltips="false"
+    //% blockHidden=true
     export function onIrButton_Handle(button: YFIrButton_Handle, action: YFIrButtonAction, handler: () => void) {
         control.onEvent(
             action === YFIrButtonAction.Pressed ? MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID : MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
@@ -1788,6 +1811,7 @@ namespace YFSENSORS {
     //% block="Handle Type IR button code %button"
     //% button.fieldEditor="gridpicker" button.fieldOptions.columns=3
     //% button.fieldOptions.tooltips="false"
+    //% blockHidden=true
     export function irButtonCode_Handle(button: YFIrButton_Handle): number {
         return button as number;
     }
