@@ -10,7 +10,6 @@
  * @date  2021-11-23
 */
 
-
 enum YFIrProtocol {
     //% block="Keyestudio"
     Keyestudio = 0,
@@ -103,6 +102,21 @@ enum YFIrButton {
     //% block="9"
     Number_9 = 0x52,
 }
+
+
+enum SensorBoardSlot4Pin {
+    //% block="P13-P14"
+    P13_P14,
+    //% block="P12-P1"
+    P12_P1,
+    //% block="P8-P2"
+    P8_P2,
+    //% block="P15-P16"
+    P15_P16,
+    //% block="P19-P20"
+    P19_P20,
+}
+
 /************************* IR *************************/
 
 enum YFADOutputModule {
@@ -629,6 +643,36 @@ namespace YFSENSORS {
     let _SEG = [0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71];
     let _intensity = 8
     let dbuf = [0, 0, 0, 0]
+
+    ////////////// Helper //////////////
+    function slot4PinToPins(slot: SensorBoardSlot4Pin): DigitalPin[] {
+        let pins: DigitalPin[] = [DigitalPin.P12, DigitalPin.P1]
+        switch(slot) {
+            case SensorBoardSlot4Pin.P12_P1:
+                return pins;
+            case SensorBoardSlot4Pin.P13_P14:
+                pins[0] = DigitalPin.P13;
+                pins[1] = DigitalPin.P14;
+            case SensorBoardSlot4Pin.P15_P16:
+                pins[0] = DigitalPin.P15;
+                pins[1] = DigitalPin.P16;
+            case SensorBoardSlot4Pin.P19_P20:
+                pins[0] = DigitalPin.P19;
+                pins[1] = DigitalPin.P20;
+            case SensorBoardSlot4Pin.P8_P2:
+                pins[0] = DigitalPin.P8;
+                pins[1] = DigitalPin.P2;
+        }
+        return pins
+    }
+
+    //% group="Common"
+    //% blockId="slot4PinToPinsPicker" block="%slot"
+    //% blockHidden=true
+    export function slot4PinToPinsPicker(slot: SensorBoardSlot4Pin): DigitalPin[] {
+        return slot4PinToPins(slot)
+    }
+
     /////////////////////// DigitalTubes ///////////////////////
 
     ///////////////////// Output ///////////////////////
@@ -669,6 +713,7 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_domOnOff weight=11 blockGap=15
     //% block="%num"
     //% num.fieldEditor="gridpicker" num.fieldOptions.columns=2
+    //% blockHidden=true
     export function domOnOff(num: YFSwitchState): number {
         return num;
     }
@@ -1218,6 +1263,47 @@ namespace YFSENSORS {
     }
     
     ///////////////////// Input Sonar Sensors ///////////////////////
+    let sonarTrigPin: DigitalPin;
+    let sonarEchoPin: DigitalPin;
+    let sonarUnit: YFPingUnit;
+    //% subcategory="超声波传感器"
+    //% blockId=initSonarSensorSlot
+    //% block="超声波连接在 %slot || 单位 %unit"
+    export function initSonarSensorSlot(slot: SensorBoardSlot4Pin, unit: YFPingUnit = YFPingUnit.Centimeters) {
+        let pins = slot4PinToPins(slot)
+        sonarEchoPin = pins[0]
+        sonarTrigPin = pins[1]
+        sonarUnit = unit
+    }
+    /**
+     * Send a ping and get the echo time (in microseconds) as a result
+     * @param maxCmDistance maximum distance in centimeters (default is 450)
+     */
+    //% subcategory="超声波传感器"
+    //% blockId=YFSENSORS_sonar_ping_v2 weight=79 blockGap=15
+    //% block="超声波探测到距离"
+    export function pingV2(maxCmDistance = 450): number {
+        // send pulse
+        let trig = sonarTrigPin
+        let echo = sonarEchoPin
+        let unit = sonarUnit
+        pins.setPull(trig, PinPullMode.PullNone);
+        pins.digitalWritePin(trig, 0);
+        control.waitMicros(10);
+        pins.digitalWritePin(trig, 1);
+        control.waitMicros(50);
+        pins.digitalWritePin(trig, 0);
+
+        // read pulse
+        const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
+
+        switch (unit) {
+            case YFPingUnit.Centimeters: return Math.idiv(d, 58);
+            case YFPingUnit.Inches: return Math.idiv(d, 148);
+            default: return d ;
+        }
+    }
+
     /**
      * Send a ping and get the echo time (in microseconds) as a result
      * @param trig trigger pin. eg: DigitalPin.P2
@@ -1232,7 +1318,8 @@ namespace YFSENSORS {
     //% echo.fieldEditor="gridpicker" echo.fieldOptions.columns=4 
     //% unit.fieldEditor="gridpicker" unit.fieldOptions.columns=3
     //% inlineInputMode=inline
-    export function ping(trig: DigitalPin, echo: DigitalPin, unit: YFPingUnit, maxCmDistance = 450): number {
+    //% blockHidden=true
+    export function ping(trig: DigitalPin = sonarTrigPin, echo: DigitalPin = sonarEchoPin, unit: YFPingUnit = sonarUnit, maxCmDistance = 450): number {
         // send pulse
         pins.setPull(trig, PinPullMode.PullNone);
         pins.digitalWritePin(trig, 0);
