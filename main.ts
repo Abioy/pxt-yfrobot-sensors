@@ -1080,6 +1080,47 @@ namespace YFSENSORS {
     }
 
     ///////////////////// Output - Traffic Light module ///////////////////////
+    let trafficLightPin1: DigitalPin;
+    let trafficLightPin2: DigitalPin;
+    //% subcategory="交通灯"
+    //% blockId=initTrafficLightSlot
+    //% block="交通灯连接在 %slot"
+    export function initTrafficLightSlot(slot: SensorBoardSlot4Pin) {
+        let pins = slot4PinToPins(slot)
+        trafficLightPin1 = pins[1]
+        trafficLightPin2 = pins[0]
+    }
+    /**
+     * Traffic Light module light up red, green or yellow led.
+     * @param wColor which color led. eg: YFTrafficLightLED.AllTurnOFF
+     */
+    //% subcategory="交通灯"
+    //% blockId=YFSENSORS_trafficLightModuleV2 weight=80 blockGap=15
+    //% block="交通灯%wColor"
+    //% wColor.fieldEditor="gridpicker" wColor.fieldOptions.columns=2
+    export function trafficLightModuleV2(wColor: YFTrafficLightLED): void {
+        let tlm1Pin = trafficLightPin1
+        let tlm2Pin = trafficLightPin2
+        switch (wColor) {
+            case YFTrafficLightLED.RedLED:            // Red LED
+                pins.digitalWritePin(tlm1Pin, 0);
+                pins.digitalWritePin(tlm2Pin, 1);
+                break;
+            case YFTrafficLightLED.YellowLED:         // Yellow LED
+                pins.digitalWritePin(tlm1Pin, 1);
+                pins.digitalWritePin(tlm2Pin, 0);
+                break;
+            case YFTrafficLightLED.GreenLED:          // Green LED
+                pins.digitalWritePin(tlm1Pin, 1);
+                pins.digitalWritePin(tlm2Pin, 2);
+                break;
+            default: // YFTrafficLightLED.AllTurnOFF: // all lights turn off
+                pins.digitalWritePin(tlm1Pin, 0);
+                pins.digitalWritePin(tlm2Pin, 0);
+                break;
+        }
+    }
+
     /**
      * Traffic Light module light up red, green or yellow led.
      * @param tlm1Pin pin 1. eg: DigitalPin.P1
@@ -1092,6 +1133,7 @@ namespace YFSENSORS {
     //% tlm1Pin.fieldEditor="gridpicker" tlm1Pin.fieldOptions.columns=4
     //% tlm2Pin.fieldEditor="gridpicker" tlm2Pin.fieldOptions.columns=4
     //% wColor.fieldEditor="gridpicker" wColor.fieldOptions.columns=2
+    //% blockHidden=true
     export function trafficLightModule(tlm1Pin: DigitalPin, tlm2Pin: DigitalPin, wColor: YFTrafficLightLED): void {
         switch (wColor) {
             case YFTrafficLightLED.RedLED:            // Red LED
