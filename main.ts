@@ -105,16 +105,12 @@ enum YFIrButton {
 
 
 enum SensorBoardSlot4Pin {
-    //% block="P13-P14"
-    P13_P14,
     //% block="P12-P1"
     P12_P1,
     //% block="P8-P2"
     P8_P2,
-    //% block="P15-P16"
-    P15_P16,
-    //% block="P19-P20"
-    P19_P20,
+    //% block="P13-P14"
+    P13_P14,
 }
 
 enum SensorBoardForDigitalTube {
@@ -658,12 +654,6 @@ namespace YFSENSORS {
             case SensorBoardSlot4Pin.P13_P14:
                 pins[0] = DigitalPin.P13;
                 pins[1] = DigitalPin.P14;
-            case SensorBoardSlot4Pin.P15_P16:
-                pins[0] = DigitalPin.P15;
-                pins[1] = DigitalPin.P16;
-            case SensorBoardSlot4Pin.P19_P20:
-                pins[0] = DigitalPin.P19;
-                pins[1] = DigitalPin.P20;
             case SensorBoardSlot4Pin.P8_P2:
                 pins[0] = DigitalPin.P8;
                 pins[1] = DigitalPin.P2;
@@ -1115,8 +1105,8 @@ namespace YFSENSORS {
     //% group="交通灯(白色线)"
     //% blockId=initTrafficLightSlot
     //% block="交通灯连接在 %slot"
-    //% slot.defl='SensorBoardSlot4Pin.P15_P16'
-    export function initTrafficLightSlot(slot: SensorBoardSlot4Pin = SensorBoardSlot4Pin.P15_P16) {
+    //% slot.defl='SensorBoardSlot4Pin.P12_P1'
+    export function initTrafficLightSlot(slot: SensorBoardSlot4Pin = SensorBoardSlot4Pin.P12_P1) {
         let pins = slot4PinToPins(slot)
         trafficLightPin1 = pins[1]
         trafficLightPin2 = pins[0]
@@ -1197,6 +1187,7 @@ namespace YFSENSORS {
     //% block="at pin %aimPin| %aim| module"
     //% aimPin.fieldEditor="gridpicker" aimPin.fieldOptions.columns=4
     //% aim.fieldEditor="gridpicker" aim.fieldOptions.columns=2
+    //% advance=true
     export function analogInputModule(aimPin: AnalogPin, aim: YFAnalogInputModule): number {
         let aimM = aim;  // no work
         return pins.analogReadPin(aimPin);
@@ -1228,6 +1219,7 @@ namespace YFSENSORS {
     //% block="at pin %dimPin| %dim| module"
     //% dimPin.fieldEditor="gridpicker" dimPin.fieldOptions.columns=4
     //% dim.fieldEditor="gridpicker" dim.fieldOptions.columns=2
+    //% advance=true
     export function digitalInputModule(dimPin: DigitalPin, dim: YFDigitalInputModule): boolean {
         
         pins.setPull(dimPin, PinPullMode.PullNone);
