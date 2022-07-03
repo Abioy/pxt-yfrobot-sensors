@@ -117,6 +117,11 @@ enum SensorBoardSlot4Pin {
     P19_P20,
 }
 
+enum SensorBoardForDigitalTube {
+    //% block="P13-P14"
+    P13_P14,
+}
+
 /************************* IR *************************/
 
 enum YFADOutputModule {
@@ -673,6 +678,31 @@ namespace YFSENSORS {
         return slot4PinToPins(slot)
     }
 
+    ///////////////////// PATROL //////////////////////
+    // 巡线
+    let patrolIR1Pin = DigitalPin.P15
+    let patrolIR2Pin = DigitalPin.P16
+
+    //% group="寻迹模块(白色线)"
+    //% block="寻迹模块连接到%slot"
+    export function initPatrolSlot(slot: SensorBoardSlot4Pin) {
+        let pins = slot4PinToPins(slot)
+        patrolIR1Pin = pins[1]
+        patrolIR2Pin = pins[0]
+    }
+
+    //% group="寻迹模块(白色线)"
+    //% block="读取寻迹IR1(左)信号"
+    export function readPatrolIR1(): boolean {
+        return digitalInputModule(patrolIR1Pin, YFDigitalInputModule.PATROL_LEFT)
+    }
+
+    //% group="寻迹模块(白色线)"
+    //% block="读取寻迹IR2(右)信号"
+    export function readPatrolIR2(): boolean {
+        return digitalInputModule(patrolIR2Pin, YFDigitalInputModule.PATROL_RIGHT)
+    }
+
     /////////////////////// DigitalTubes ///////////////////////
 
     ///////////////////// Output ///////////////////////
@@ -1082,10 +1112,11 @@ namespace YFSENSORS {
     ///////////////////// Output - Traffic Light module ///////////////////////
     let trafficLightPin1: DigitalPin;
     let trafficLightPin2: DigitalPin;
-    //% subcategory="交通灯"
+    //% group="交通灯(白色线)"
     //% blockId=initTrafficLightSlot
     //% block="交通灯连接在 %slot"
-    export function initTrafficLightSlot(slot: SensorBoardSlot4Pin) {
+    //% slot.defl='SensorBoardSlot4Pin.P15_P16'
+    export function initTrafficLightSlot(slot: SensorBoardSlot4Pin = SensorBoardSlot4Pin.P15_P16) {
         let pins = slot4PinToPins(slot)
         trafficLightPin1 = pins[1]
         trafficLightPin2 = pins[0]
@@ -1094,7 +1125,7 @@ namespace YFSENSORS {
      * Traffic Light module light up red, green or yellow led.
      * @param wColor which color led. eg: YFTrafficLightLED.AllTurnOFF
      */
-    //% subcategory="交通灯"
+    //% group="交通灯(白色线)"
     //% blockId=YFSENSORS_trafficLightModuleV2 weight=80 blockGap=15
     //% block="交通灯%wColor"
     //% wColor.fieldEditor="gridpicker" wColor.fieldOptions.columns=2
@@ -1308,7 +1339,7 @@ namespace YFSENSORS {
     let sonarTrigPin: DigitalPin;
     let sonarEchoPin: DigitalPin;
     let sonarUnit: YFPingUnit;
-    //% subcategory="超声波传感器"
+    //% group="超声波传感器(白色线)"
     //% blockId=initSonarSensorSlot
     //% block="超声波连接在 %slot || 单位 %unit"
     export function initSonarSensorSlot(slot: SensorBoardSlot4Pin, unit: YFPingUnit = YFPingUnit.Centimeters) {
@@ -1321,7 +1352,7 @@ namespace YFSENSORS {
      * Send a ping and get the echo time (in microseconds) as a result
      * @param maxCmDistance maximum distance in centimeters (default is 450)
      */
-    //% subcategory="超声波传感器"
+    //% group="超声波传感器(白色线)"
     //% blockId=YFSENSORS_sonar_ping_v2 weight=79 blockGap=15
     //% block="超声波探测到距离"
     export function pingV2(maxCmDistance = 450): number {
@@ -1392,6 +1423,7 @@ namespace YFSENSORS {
     //% block="connect Motor drive %w_M| DIR %pin_dir| PWM %pin_pwm"
     //% pin_dir.fieldEditor="gridpicker" pin_dir.fieldOptions.columns=4 pin_dir.fieldOptions.tooltips="false"
     //% pin_pwm.fieldEditor="gridpicker" pin_pwm.fieldOptions.columns=4 pin_pwm.fieldOptions.tooltips="false"
+    //% blockHidden=true
     export function motorConnectPin(w_M: YFMotorsPin, pin_dir: DigitalPin, pin_pwm: AnalogPin): void {
         if (w_M == YFMotorsPin.M1) {
             YFSENSORSMotor1D = pin_dir
@@ -1417,6 +1449,7 @@ namespace YFSENSORS {
     //% speed.min=0 speed.max=255
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     //% direction.fieldEditor="gridpicker" direction.fieldOptions.columns=2
+    //% blockHidden=true
     export function motorRun(index: YFMotors, direction: YFDir, speed: number): void {
         if (index > 2 || index < 0)
             return
@@ -1446,11 +1479,26 @@ namespace YFSENSORS {
     //% blockId=YFSENSORS_motorStop weight=10 blockGap=15
     //% block="motor |%motor stop"
     //% motor.fieldEditor="gridpicker" motor.fieldOptions.columns=2 
+    //% blockHidden=true
     export function motorStop(motor: YFMotors): void {
         motorRun(motor, 0, 0);
     }
 
     ///////////////////// DigitalTubes ///////////////////////
+    /**
+     * Connects the digital tube module to the specified pin.
+     */
+    //% subcategory="DigitalTube"
+    //% blockId="YFSENSORS_4digitaltubes_pins_v2" weight=100 blockGap=8
+    //% block="数码管连接在%slot"
+    //% pin_c.fieldEditor="gridpicker" pin_c.fieldOptions.columns=4 pin_c.fieldOptions.tooltips="false"
+    //% pin_d.fieldEditor="gridpicker" pin_d.fieldOptions.columns=4 pin_d.fieldOptions.tooltips="false"
+    export function connectPINv2(slot: SensorBoardForDigitalTube): void {
+        PINCLK = DigitalPin.P13;
+        PINDIO = DigitalPin.P14;
+        on();
+        clear();
+    }
     /**
      * Connects the digital tube module to the specified pin.
      * @param pin_d DIO pin. eg: DigitalPin.P1
@@ -1461,6 +1509,7 @@ namespace YFSENSORS {
     //% block="connect 4 digital tubes at DIO %pin_d and CLK %pin_c"
     //% pin_c.fieldEditor="gridpicker" pin_c.fieldOptions.columns=4 pin_c.fieldOptions.tooltips="false"
     //% pin_d.fieldEditor="gridpicker" pin_d.fieldOptions.columns=4 pin_d.fieldOptions.tooltips="false"
+    //% blockHidden=true
     export function connectPIN(pin_d: DigitalPin, pin_c: DigitalPin): void {
         PINCLK = pin_c;
         PINDIO = pin_d;
