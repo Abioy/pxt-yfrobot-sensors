@@ -602,7 +602,7 @@ enum YFDHT11_state {
 }
 
 //% color="#45b787" weight=10 icon="\uf12e"
-//% groups=["超声波传感器(白色线)", "交通灯(白色线)", "寻迹模块(白色线)", "Input"]
+//% groups=["超声波传感器(白色线)", "交通灯(白色线)", "寻迹模块(白色线)", "其他(先不用)"]
 namespace YFSENSORS {
     
     ///////////////////// IR ///////////////////////
@@ -676,6 +676,7 @@ namespace YFSENSORS {
 
     //% group="寻迹模块(白色线)"
     //% block="[寻迹] 模块连接到%slot"
+    //% weight=100
     export function initPatrolSlot(slot: SensorBoardSlot4Pin) {
         let pins = slot4PinToPins(slot)
         patrolIR1Pin = pins[1]
@@ -1106,6 +1107,7 @@ namespace YFSENSORS {
     //% group="交通灯(白色线)"
     //% blockId=initTrafficLightSlot
     //% block="[交通灯] 连接在 %slot"
+    //% weight=100
     //% slot.defl='SensorBoardSlot4Pin.P12_P1'
     export function initTrafficLightSlot(slot: SensorBoardSlot4Pin = SensorBoardSlot4Pin.P12_P1) {
         let pins = slot4PinToPins(slot)
@@ -1183,7 +1185,7 @@ namespace YFSENSORS {
      * @param aimPin pin. eg: AnalogPin.P1
      * @param aim pin. eg: YFAnalogInputModule.LIGHT
      */
-    //% %group="Input"
+    //% group="其他(先不用)"
     //% blockId=YFSENSORS_analogInputModule weight=100 blockGap=15
     //% block="at pin %aimPin| %aim| module"
     //% aimPin.fieldEditor="gridpicker" aimPin.fieldOptions.columns=4
@@ -1215,7 +1217,7 @@ namespace YFSENSORS {
      * @param dimPin pin. eg: DigitalPin.P8
      * @param dim pin. eg: YFDigitalInputModule.BUTTON
      */
-    //% group="Input"
+    //% group="其他(先不用)"
     //% blockId=YFSENSORS_digitalInputModule weight=90 blockGap=15
     //% block="at pin %dimPin| %dim| module"
     //% dimPin.fieldEditor="gridpicker" dimPin.fieldOptions.columns=4
@@ -1335,6 +1337,7 @@ namespace YFSENSORS {
     //% group="超声波传感器(白色线)"
     //% blockId=initSonarSensorSlot
     //% block="[超声波] 连接在%slot || 单位 %unit"
+    //% weight=100
     export function initSonarSensorSlot(slot: SensorBoardSlot4Pin, unit: YFPingUnit = YFPingUnit.Centimeters) {
         let pins = slot4PinToPins(slot)
         sonarEchoPin = pins[0]
@@ -1486,6 +1489,7 @@ namespace YFSENSORS {
     //% block="[数码管] 连接在%slot"
     //% pin_c.fieldEditor="gridpicker" pin_c.fieldOptions.columns=4 pin_c.fieldOptions.tooltips="false"
     //% pin_d.fieldEditor="gridpicker" pin_d.fieldOptions.columns=4 pin_d.fieldOptions.tooltips="false"
+    //% weight=100
     export function connectPINv2(slot: SensorBoardForDigitalTube): void {
         PINCLK = DigitalPin.P13;
         PINDIO = DigitalPin.P14;
@@ -1604,7 +1608,7 @@ namespace YFSENSORS {
      * turn on display
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_ON" weight=15 blockGap=8
+    //% blockId="YFSENSORS_TM650_ON_v2" weight=15 blockGap=8
     //% block="[数码管] 开启显示"
     export function on() {
         cmd(_intensity * 16 + 1)
@@ -1614,7 +1618,7 @@ namespace YFSENSORS {
      * turn off display
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_OFF" weight=10 blockGap=8
+    //% blockId="YFSENSORS_TM650_OFF_v2" weight=10 blockGap=8
     //% block="[数码管] 关闭显示"
     export function off() {
         _intensity = 0
@@ -1625,7 +1629,7 @@ namespace YFSENSORS {
      * clear display content
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_CLEAR" weight=5 blockGap=8
+    //% blockId="YFSENSORS_TM650_CLEAR_v2" weight=5 blockGap=8
     //% block="[数码管] 清空显示的内容"
     export function clear() {
         dat(0, 0)
@@ -1641,8 +1645,8 @@ namespace YFSENSORS {
      * @param bit is position, eg: 0
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_DIGIT" weight=40 blockGap=8
-    //% block="[数码管] 在第%bit位 显示数字%num (十六进制）"
+    //% blockId="YFSENSORS_TM650_DIGIT_v2" weight=40 blockGap=8
+    //% block="[数码管] 在第%bit位显示一位数字%num (十六进制）"
     //% num.max=15 num.min=0
     //% bit.max=3 bit.min=0
     export function digit(num: number, bit: number) {
@@ -1655,8 +1659,8 @@ namespace YFSENSORS {
      * @param num is number will be shown, eg: 100
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_SHOW_NUMBER" weight=45 blockGap=8
-    //% block="[数码管] 显示数字%num (十进制）"
+    //% blockId="YFSENSORS_TM650_SHOW_NUMBER_v2" weight=45 blockGap=8
+    //% block="[数码管] 显示%num (十进制）"
     export function showNumber(num: number) {
         if (num < 0) {
             dat(0, 0x40) // '-'
@@ -1674,8 +1678,8 @@ namespace YFSENSORS {
      * @param num is number will be shown, eg: 123
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_SHOW_HEX_NUMBER" weight=43 blockGap=8
-    //% block="[数码管] 显示数字%num (十六进制）"
+    //% blockId="YFSENSORS_TM650_SHOW_HEX_NUMBER_v2" weight=43 blockGap=8
+    //% block="[数码管] 显示%num (十六进制）"
     export function showHex(num: number) {
         if (num < 0) {
             dat(0, 0x40) // '-'
@@ -1694,7 +1698,7 @@ namespace YFSENSORS {
      * @param show is true/false, eg: true
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_SHOW_DP" weight=38 blockGap=8
+    //% blockId="YFSENSORS_TM650_SHOW_DP_v2" weight=38 blockGap=8
     //% block="[数码管] 第%bit个点号 %show"
     //% bit.max=3 bit.min=0
     //% show.shadow="toggleOnOff"
@@ -1708,7 +1712,7 @@ namespace YFSENSORS {
      * @param dat is intensity of the display, eg: 3
      */
     //% subcategory="DigitalTube"
-    //% blockId="YFSENSORS_TM650_INTENSITY" weight=35 blockGap=8
+    //% blockId="YFSENSORS_TM650_INTENSITY_v2" weight=35 blockGap=8
     //% block="[数码管] 设置亮度为%dat"
     //% dat.max=7 dat.min=0
     export function setIntensity(dat: number) {
