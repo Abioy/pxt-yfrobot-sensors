@@ -602,6 +602,7 @@ enum YFDHT11_state {
 }
 
 //% color="#45b787" weight=10 icon="\uf12e"
+//% groups=["超声波传感器(白色线)", "交通灯(白色线)", "寻迹模块(白色线)", "Input"]
 namespace YFSENSORS {
     
     ///////////////////// IR ///////////////////////
@@ -674,7 +675,7 @@ namespace YFSENSORS {
     let patrolIR2Pin = DigitalPin.P16
 
     //% group="寻迹模块(白色线)"
-    //% block="寻迹模块连接到%slot"
+    //% block="[寻迹] 模块连接到%slot"
     export function initPatrolSlot(slot: SensorBoardSlot4Pin) {
         let pins = slot4PinToPins(slot)
         patrolIR1Pin = pins[1]
@@ -682,13 +683,13 @@ namespace YFSENSORS {
     }
 
     //% group="寻迹模块(白色线)"
-    //% block="读取寻迹IR1(左)信号"
+    //% block="[寻迹] 读取左边(IR1)信号"
     export function readPatrolIR1(): boolean {
         return digitalInputModule(patrolIR1Pin, YFDigitalInputModule.PATROL_LEFT)
     }
 
     //% group="寻迹模块(白色线)"
-    //% block="读取寻迹IR2(右)信号"
+    //% block="[寻迹] 读取右边(IR2)信号"
     export function readPatrolIR2(): boolean {
         return digitalInputModule(patrolIR2Pin, YFDigitalInputModule.PATROL_RIGHT)
     }
@@ -1104,7 +1105,7 @@ namespace YFSENSORS {
     let trafficLightPin2: DigitalPin;
     //% group="交通灯(白色线)"
     //% blockId=initTrafficLightSlot
-    //% block="交通灯连接在 %slot"
+    //% block="[交通灯] 连接在 %slot"
     //% slot.defl='SensorBoardSlot4Pin.P12_P1'
     export function initTrafficLightSlot(slot: SensorBoardSlot4Pin = SensorBoardSlot4Pin.P12_P1) {
         let pins = slot4PinToPins(slot)
@@ -1117,7 +1118,7 @@ namespace YFSENSORS {
      */
     //% group="交通灯(白色线)"
     //% blockId=YFSENSORS_trafficLightModuleV2 weight=80 blockGap=15
-    //% block="交通灯%wColor"
+    //% block="[交通灯] 点亮%wColor"
     //% wColor.fieldEditor="gridpicker" wColor.fieldOptions.columns=2
     export function trafficLightModuleV2(wColor: YFTrafficLightLED): void {
         let tlm1Pin = trafficLightPin1
@@ -1182,7 +1183,7 @@ namespace YFSENSORS {
      * @param aimPin pin. eg: AnalogPin.P1
      * @param aim pin. eg: YFAnalogInputModule.LIGHT
      */
-    //% group="Input"
+    //% %group="Input"
     //% blockId=YFSENSORS_analogInputModule weight=100 blockGap=15
     //% block="at pin %aimPin| %aim| module"
     //% aimPin.fieldEditor="gridpicker" aimPin.fieldOptions.columns=4
@@ -1333,7 +1334,7 @@ namespace YFSENSORS {
     let sonarUnit: YFPingUnit;
     //% group="超声波传感器(白色线)"
     //% blockId=initSonarSensorSlot
-    //% block="超声波连接在 %slot || 单位 %unit"
+    //% block="[超声波] 连接在%slot || 单位 %unit"
     export function initSonarSensorSlot(slot: SensorBoardSlot4Pin, unit: YFPingUnit = YFPingUnit.Centimeters) {
         let pins = slot4PinToPins(slot)
         sonarEchoPin = pins[0]
@@ -1346,7 +1347,7 @@ namespace YFSENSORS {
      */
     //% group="超声波传感器(白色线)"
     //% blockId=YFSENSORS_sonar_ping_v2 weight=79 blockGap=15
-    //% block="超声波探测到距离"
+    //% block="[超声波] 探测到距离"
     export function pingV2(maxCmDistance = 450): number {
         // send pulse
         let trig = sonarTrigPin
@@ -1482,7 +1483,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_4digitaltubes_pins_v2" weight=100 blockGap=8
-    //% block="数码管连接在%slot"
+    //% block="[数码管] 连接在%slot"
     //% pin_c.fieldEditor="gridpicker" pin_c.fieldOptions.columns=4 pin_c.fieldOptions.tooltips="false"
     //% pin_d.fieldEditor="gridpicker" pin_d.fieldOptions.columns=4 pin_d.fieldOptions.tooltips="false"
     export function connectPINv2(slot: SensorBoardForDigitalTube): void {
@@ -1604,7 +1605,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_ON" weight=15 blockGap=8
-    //% block="turn on display"
+    //% block="[数码管] 开启显示"
     export function on() {
         cmd(_intensity * 16 + 1)
     }
@@ -1614,7 +1615,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_OFF" weight=10 blockGap=8
-    //% block="turn off display"
+    //% block="[数码管] 关闭显示"
     export function off() {
         _intensity = 0
         cmd(0)
@@ -1625,7 +1626,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_CLEAR" weight=5 blockGap=8
-    //% block="clear display"
+    //% block="[数码管] 清空显示的内容"
     export function clear() {
         dat(0, 0)
         dat(1, 0)
@@ -1641,7 +1642,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_DIGIT" weight=40 blockGap=8
-    //% block="show digit %num|at %bit"
+    //% block="[数码管] 在第%bit位 显示数字%num (十六进制）"
     //% num.max=15 num.min=0
     //% bit.max=3 bit.min=0
     export function digit(num: number, bit: number) {
@@ -1655,7 +1656,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_SHOW_NUMBER" weight=45 blockGap=8
-    //% block="show number %num"
+    //% block="[数码管] 显示数字%num (十进制）"
     export function showNumber(num: number) {
         if (num < 0) {
             dat(0, 0x40) // '-'
@@ -1674,7 +1675,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_SHOW_HEX_NUMBER" weight=43 blockGap=8
-    //% block="show hex number %num"
+    //% block="[数码管] 显示数字%num (十六进制）"
     export function showHex(num: number) {
         if (num < 0) {
             dat(0, 0x40) // '-'
@@ -1694,8 +1695,9 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_SHOW_DP" weight=38 blockGap=8
-    //% block="at %bit|show dot point %show"
+    //% block="[数码管] 第%bit个点号 %show"
     //% bit.max=3 bit.min=0
+    //% show.shadow="toggleOnOff"
     export function showDpAt(bit: number, show: boolean) {
         if (show) dat(bit, dbuf[bit % 4] | 0x80)
         else dat(bit, dbuf[bit % 4] & 0x7F)
@@ -1707,7 +1709,7 @@ namespace YFSENSORS {
      */
     //% subcategory="DigitalTube"
     //% blockId="YFSENSORS_TM650_INTENSITY" weight=35 blockGap=8
-    //% block="set intensity %dat"
+    //% block="[数码管] 设置亮度为%dat"
     //% dat.max=7 dat.min=0
     export function setIntensity(dat: number) {
         if ((dat < 0) || (dat > 8))
