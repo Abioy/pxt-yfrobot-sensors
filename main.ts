@@ -111,6 +111,8 @@ enum SensorBoardSlot4Pin {
     P8_P2,
     //% block="P13-P14"
     P13_P14,
+    //% block="P15-P16(注意电源)"
+    P15_P16,
 }
 
 enum SensorBoardForDigitalTube {
@@ -658,6 +660,9 @@ namespace YFSENSORS {
             case SensorBoardSlot4Pin.P8_P2:
                 pins[0] = DigitalPin.P8;
                 pins[1] = DigitalPin.P2;
+            case SensorBoardSlot4Pin.P15_P16:
+                pins[0] = DigitalPin.P15;
+                pins[1] = DigitalPin.P16;
         }
         return pins
     }
